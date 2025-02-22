@@ -1,4 +1,40 @@
 
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg> สำหรับสมาชิก</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/login" method="post">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="exampleInputUsername" class="form-label">ชื่อผู้ใช้งาน</label>
+            <input type="text" class="form-control" id="exampleInputUsername" value="<%= login %>" name="login">  
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword" class="form-label">รหัสผ่าน</label>
+            <input type="password" class="form-control" id="exampleInputPassword" value="<%= password %>" name="password">
+          </div>
+          <!-- <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" name="save" type="checkbox" value="checked" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                เก็บไว้ในเครื่องนี้
+              </label>
+            </div>
+          </div> -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+       </div>
+      </form>
+    </div>
+  </div>
+</div>
 <footer>
     <!-- place footer here -->
 </footer>
