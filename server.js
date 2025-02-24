@@ -8,12 +8,11 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
+const multer = require('multer');
+const fs = require('fs');
 
 
 
-// app set view engine
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
 
 // database connection
 // สร้างการเชื่อมต่อกับฐานข้อมูล MySQL
@@ -32,6 +31,23 @@ db.connect((err) => {
         console.log('เชื่อมต่อฐานข้อมูลสำเร็จ!');
     }
 });
+
+
+// ตั้งค่า multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+})
+const upload = multer({ storage: storage });
+
+
+// app set view engine
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 app.use(session({secret: 'my secret', resave : false , saveUninitialized: false}));
 app.use(cookieParser());
@@ -111,6 +127,38 @@ app.get('/product/:fruit',(req,res) => {
 app.get('/contact',(req,res) => {
     res.render('contact')
 })
+
+app.get('/create',(req,res) => {
+    res.render('create')
+})
+
+app.all('/create', upload.single('image'), (req, res) => {
+    let { name, description } = req.body;
+    const image = req.file ? req.file.filename : null;
+
+    const sql = 'INSERT INTO products (name, description, image) VALUES (?, ?, ?)';
+    db.query(sql, [name, description, image], (err, results) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาด:', err);
+            return res.render('create', { message: 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล' });
+        }
+        res.render('create', { message: 'เพิ่มข้อมูลสำเร็จ' });
+    });
+
+});
+
+app.get('/list_product',(req,res) => {
+    let sql = "SELECT * FROM products"
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาด:', err);
+            return res.render('list_product', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+        }
+        res.render('list_product', {product: results})
+    });
+})
+
+
 app.get('/member2',(req,res) => {
     let sql2 = "SELECT * FROM tbl_user"
     db.query(sql2, (err, results) => {
