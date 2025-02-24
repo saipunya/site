@@ -20,7 +20,7 @@ app.set('view engine', 'ejs')
 const db = mysql.createConnection({
     host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
     user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: '',       // เปลี่ยนเป็น password ของ MySQL
+    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
     database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
 });
 
@@ -54,19 +54,6 @@ app.use((req, res, next) => {
     });
 
 
-// app.all('/login', (req, res) => {
-//     let login = req.body.login || ''; // ✅ กำหนดค่าเริ่มต้นให้ login
-//     let password = req.body.password || '';
-//     if (login === 'admin' && password === 'sumet022') {
-//         req.session.login = login;
-//         req.session.isValid = true;
-//         res.redirect('/member');
-//     } else {
-//         res.render('index');
-//     }
-//     req.session.password = login
-//     req.session.isValid = true
-// });
 
 app.all('/login', (req, res) => {
     let login = req.body.login || '';
@@ -123,6 +110,16 @@ app.get('/product/:fruit',(req,res) => {
 
 app.get('/contact',(req,res) => {
     res.render('contact')
+})
+app.get('/member2',(req,res) => {
+    let sql2 = "SELECT * FROM tbl_user"
+    db.query(sql2, (err, results) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาด:', err);
+            return res.render('member2', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+        }
+        res.render('member2', {data: results})
+    });
 })
 app.listen(port,()=>{
     console.log('server is listening on port', port);
