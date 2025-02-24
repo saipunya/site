@@ -5,7 +5,7 @@ const port = 3000;
 const path = require('path');
 const ejs = require('ejs');
 const session = require('express-session');
-const cookieParser = require('cookie-parser');  
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 
@@ -20,7 +20,7 @@ app.set('view engine', 'ejs')
 const db = mysql.createConnection({
     host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
     user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
+    password: '',       // เปลี่ยนเป็น password ของ MySQL
     database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
 });
 
@@ -42,6 +42,7 @@ app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist')
 
 
 app.use((req, res, next) => {
+    res.locals.user = req.session.user || '';
     res.locals.login = req.session.login || '';
     res.locals.password = req.session.password || '';
     res.locals.isValid = req.session.isValid || false;
@@ -51,7 +52,7 @@ app.use((req, res, next) => {
     app.get('/', (req, res) => {
         res.render('index');
     });
-    
+
 
 // app.all('/login', (req, res) => {
 //     let login = req.body.login || ''; // ✅ กำหนดค่าเริ่มต้นให้ login
@@ -85,6 +86,8 @@ app.all('/login', (req, res) => {
 
         if (results.length > 0) {
             // ถ้าพบข้อมูลในฐานข้อมูล แสดงว่า login สำเร็จ
+            let user = results[0];
+            req.session.user = user;
             req.session.login = login;
             req.session.isValid = true;
             res.redirect('/member');
@@ -106,16 +109,16 @@ app.get('/member', (req, res) => {
     } else {
         res.redirect('/');
     }
-  
+
 
 });
 
 
 app.get('/product/:fruit',(req,res) => {
     let  fruit = req.params.fruit
-    
+
     res.render('product', {data: fruit})
-    
+
 })
 
 app.get('/contact',(req,res) => {
