@@ -19,7 +19,7 @@ const fs = require('fs');
 const db = mysql.createConnection({
     host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
     user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: '',       // เปลี่ยนเป็น password ของ MySQL
+    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
     database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
 });
 
@@ -128,9 +128,7 @@ app.get('/contact',(req,res) => {
     res.render('contact')
 })
 
-app.get('/create',(req,res) => {
-    res.render('create')
-})
+
 
 app.all('/create', upload.single('image'), (req, res) => {
     let { name, description } = req.body;
@@ -141,14 +139,17 @@ app.all('/create', upload.single('image'), (req, res) => {
         if (err) {
             console.error('เกิดข้อผิดพลาด:', err);
             return res.render('create', { message: 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล' });
+        }else{
+            res.redirect('/list_product');
         }
-        res.render('create', { message: 'เพิ่มข้อมูลสำเร็จ' });
+ 
     });
+
 
 });
 
 app.get('/list_product',(req,res) => {
-    let sql = "SELECT * FROM products"
+    let sql = "SELECT * FROM products ORDER BY id DESC"
     db.query(sql, (err, results) => {
         if (err) {
             console.error('เกิดข้อผิดพลาด:', err);
