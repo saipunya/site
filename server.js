@@ -19,7 +19,7 @@ const fs = require('fs');
 const db = mysql.createConnection({
     host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
     user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
+    password: '',       // เปลี่ยนเป็น password ของ MySQL
     database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
 });
 
@@ -142,7 +142,7 @@ app.all('/create', upload.single('image'), (req, res) => {
         }else{
             res.redirect('/list_product');
         }
- 
+
     });
 
 
@@ -168,6 +168,30 @@ app.get('/member2',(req,res) => {
             return res.render('member2', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
         }
         res.render('member2', {data: results})
+    });
+})
+app.get('/product/edit/:id/',(req,res) => {
+    let id = req.params.id
+    let sql = "SELECT * FROM products WHERE id = ?"
+    db.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาด:', err);
+            return res.render('edit', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+        }
+        res.render('edit', {product: results[0]})
+    });
+})
+app.all('/product/update/:id',(req,res) => {
+    let id = req.params.id
+    let { name, description } = req.body;
+    const image = req.file ? req.file.filename : null;
+    let sql = "UPDATE products SET name = ?, description = ?, image = ? WHERE id = ?"
+    db.query(sql, [name, description, image, id], (err, results) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาด:', err);
+            return res.render('edit', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+        }
+        res.redirect('/list_product')
     });
 })
 app.listen(port,()=>{

@@ -1,0 +1,27 @@
+
+<%- include('layouts/header.ejs') %>
+
+<h1>Update Product</h1>
+<form action="/product/update/<%= product.id  %>" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= product.name  %>" placeholder="enter product name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">description</label>
+        <textarea name="description" class="form-control"><%= product.description %></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="image">image</label>
+        <input type="file" class="form-control" id="image" name="image">
+    </div>
+    <hr>
+    <div class="row my-2 w-25 mx-auto">
+        <button type="submit" class="btn btn-primary">update</button>
+    </div>
+</form>
+
+
+
+<%- include('layouts/footer.ejs') %>
