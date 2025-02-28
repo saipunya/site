@@ -24,8 +24,9 @@
                 <% } %>
             </td>
             <td class="text-center">
-                <a href="/product/edit/<%= item.id %>" class="btn btn-warning">edit</a>
-                <a href="/product/delete/<%= item.id %>" class="btn btn-danger">delete</a>
+                <a href="/product/edit/<%= item.id %>" class="btn btn-warning">แก้ไข</a>
+                <a href="/product/delete/<%= item.id %>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบสินค้านี้หรือไม่?');">ลบ</a>
+
             </td>
         </tr>
         <% }) %>
