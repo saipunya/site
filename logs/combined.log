@@ -1,0 +1,54 @@
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"เกิดข้อผิดพลาดในการค้นหากฎหมายกลุ่มเกษตรกร: Unknown column 'glaw_search' in 'where clause'","service":"api-server","sql":"\n        SELECT * FROM tbl_glaws \n        WHERE glaw_number LIKE '%%' OR glaw_detail LIKE '%%' OR glaw_search LIKE '%%'\n        ORDER BY glaw_id DESC\n    ","sqlMessage":"Unknown column 'glaw_search' in 'where clause'","sqlState":"42S22","stack":"Error: Unknown column 'glaw_search' in 'where clause'\n    at Packet.asError (D:\\git_site\\site\\node_modules\\mysql2\\lib\\packets\\packet.js:740:17)\n    at Query.execute (D:\\git_site\\site\\node_modules\\mysql2\\lib\\commands\\command.js:29:26)\n    at Connection.handlePacket (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:475:34)\n    at PacketParser.onPacket (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:93:12)\n    at PacketParser.executeStart (D:\\git_site\\site\\node_modules\\mysql2\\lib\\packet_parser.js:75:16)\n    at Socket.<anonymous> (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:100:25)\n    at Socket.emit (node:events:518:28)\n    at addChunk (node:internal/streams/readable:561:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n    at Readable.push (node:internal/streams/readable:392:5)"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"เกิดข้อผิดพลาดในการค้นหากฎหมายกลุ่มเกษตรกร: Unknown column 'glaw_search' in 'where clause'","service":"api-server","sql":"\n        SELECT * FROM tbl_glaws \n        WHERE glaw_number LIKE '%%' OR glaw_detail LIKE '%%' OR glaw_search LIKE '%%'\n        ORDER BY glaw_id DESC\n    ","sqlMessage":"Unknown column 'glaw_search' in 'where clause'","sqlState":"42S22","stack":"Error: Unknown column 'glaw_search' in 'where clause'\n    at Packet.asError (D:\\git_site\\site\\node_modules\\mysql2\\lib\\packets\\packet.js:740:17)\n    at Query.execute (D:\\git_site\\site\\node_modules\\mysql2\\lib\\commands\\command.js:29:26)\n    at Connection.handlePacket (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:475:34)\n    at PacketParser.onPacket (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:93:12)\n    at PacketParser.executeStart (D:\\git_site\\site\\node_modules\\mysql2\\lib\\packet_parser.js:75:16)\n    at Socket.<anonymous> (D:\\git_site\\site\\node_modules\\mysql2\\lib\\base\\connection.js:100:25)\n    at Socket.emit (node:events:518:28)\n    at addChunk (node:internal/streams/readable:561:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n    at Readable.push (node:internal/streams/readable:392:5)"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}
+{"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
+{"level":"info","message":"Server is running on port 3000","service":"api-server"}

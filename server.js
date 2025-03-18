@@ -1,76 +1,102 @@
-// สร้าง server ด้วย express และใช้ ejs เป็น view engine
+// การนำเข้าโมดูลที่ใช้
 const express = require('express');
 const app = express();
-const port = 3000;
 const path = require('path');
-const ejs = require('ejs');
+const mysql = require('mysql2');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
 const multer = require('multer');
 const fs = require('fs');
+const cors = require('cors');
+const winston = require('winston');
+require('dotenv').config();
 
+// ตั้งค่าการใช้งาน CORS
+const corsOptions = {
+    origin: '*',  // กำหนดให้ทุกโดเมนสามารถเข้าถึง API ได้ (สามารถเปลี่ยนเป็นโดเมนเฉพาะได้)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
-
-
-// database connection
-// สร้างการเชื่อมต่อกับฐานข้อมูล MySQL
+// ตั้งค่าการเชื่อมต่อฐานข้อมูล MySQL
 const db = mysql.createConnection({
-    host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
-    user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
-    database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
-// เชื่อมต่อกับ MySQL
+// เชื่อมต่อกับฐานข้อมูล MySQL
 db.connect((err) => {
     if (err) {
-        console.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
+        winston.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
     } else {
-        console.log('เชื่อมต่อฐานข้อมูลสำเร็จ!');
+        winston.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
     }
 });
 
-
-// ตั้งค่า multer
+// ตั้งค่า multer สำหรับการอัปโหลดไฟล์
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/')
+        cb(null, 'public/uploads/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
     }
-})
+});
 const upload = multer({ storage: storage });
 
-
-// app set view engine
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
-
-app.use(session({secret: 'my secret', resave : false , saveUninitialized: false}));
+// ตั้งค่าระบบ bodyParser และ cookie
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-app.use(express.static('public'))
-app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
+// ตั้งค่าการใช้งาน session
+app.use(session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false
+}));
 
+// สร้าง logger ของ winston
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: { service: 'api-server' },
+    transports: [
+        // บันทึก log ไปที่คอนโซล
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+        // บันทึก log ไปที่ไฟล์
+        new winston.transports.File({ filename: 'logs/combined.log' })
+    ],
+});
+
+// ใช้ logger ในการแสดง log
+logger.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
+// ตั้งค่าการใช้งาน view engine (EJS)
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+
+// Middleware เพื่อให้ข้อมูลผู้ใช้พร้อมใช้งานใน view
 app.use((req, res, next) => {
     res.locals.user = req.session.user || '';
     res.locals.login = req.session.login || '';
-    res.locals.password = req.session.password || '';
     res.locals.isValid = req.session.isValid || false;
     next();
 });
 
-    app.get('/', (req, res) => {
-        res.render('index');
-    });
+// หน้าแรก (render index.ejs)
+app.get('/', (req, res) => {
+    res.render('index', { password : req.session.password || '' });
+});
 
-
-
+// ระบบ login (auth)
 app.all('/login', (req, res) => {
     let login = req.body.login || '';
     let password = req.body.password || '';
@@ -79,134 +105,79 @@ app.all('/login', (req, res) => {
         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
     }
 
-    // ค้นหา username และ password ในฐานข้อมูล
     let sql = 'SELECT * FROM tbl_user WHERE use_username = ? AND use_password = ?';
     db.query(sql, [login, password], (err, results) => {
         if (err) {
-            console.error('เกิดข้อผิดพลาด:', err);
+            logger.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err);
             return res.render('index', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
         }
 
         if (results.length > 0) {
-            // ถ้าพบข้อมูลในฐานข้อมูล แสดงว่า login สำเร็จ
             let user = results[0];
             req.session.user = user;
             req.session.login = login;
             req.session.isValid = true;
             res.redirect('/member');
         } else {
-            // ถ้าไม่พบข้อมูล แสดงว่า login ไม่ถูกต้อง
             res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
         }
     });
 });
 
+// ระบบ logout
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
-app.get('/logout',(req,res) => {
-    req.session.destroy()
-    res.redirect('/')
-})
+// หน้า member
 app.get('/member', (req, res) => {
     if (res.locals.login) {
         res.render('member');
     } else {
         res.redirect('/');
     }
-
-
 });
 
+// API ค้นหากฎหมายสหกรณ์
+app.get('/api/laws/search', (req, res) => {
+    let searchTerm = req.query.name || ''; // รับค่าจาก query string เช่น ?name=กฎหมายการเกษตร
 
-app.get('/product/:fruit',(req,res) => {
-    let  fruit = req.params.fruit
+    let sql = `
+        SELECT * FROM tbl_laws 
+        WHERE law_number LIKE ? OR law_detail LIKE ? OR law_search LIKE ?
+        ORDER BY law_id DESC
+    `;
 
-    res.render('product', {data: fruit})
-
-})
-
-app.get('/contact',(req,res) => {
-    res.render('contact')
-})
-
-
-
-app.all('/create', upload.single('image'), (req, res) => {
-    let { name, description } = req.body;
-    const image = req.file ? req.file.filename : null;
-
-    const sql = 'INSERT INTO products (name, description, image) VALUES (?, ?, ?)';
-    db.query(sql, [name, description, image], (err, results) => {
+    db.query(sql, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, results) => {
         if (err) {
-            console.error('เกิดข้อผิดพลาด:', err);
-            return res.render('create', { message: 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล' });
-        }else{
-            res.redirect('/list_product');
+            logger.error('เกิดข้อผิดพลาดในการค้นหากฎหมายสหกรณ์:', err);
+            return res.status(500).json({ message: 'เกิดข้อผิดพลาดในการค้นหากฎหมายสหกรณ์' });
         }
-
+        res.json(results);
     });
-
-
 });
 
-app.get('/list_product',(req,res) => {
-    let sql = "SELECT * FROM products ORDER BY id DESC"
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('เกิดข้อผิดพลาด:', err);
-            return res.render('list_product', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
-        }
-        res.render('list_product', {product: results})
-    });
-})
+// API ค้นหากฎหมายกลุ่มเกษตรกร
+app.get('/api/glaws/search', (req, res) => {
+    let searchTerm = req.query.name || ''; // รับค่าจาก query string เช่น ?name=กฎหมายการเกษตร
 
+    let sql = `
+        SELECT * FROM tbl_glaws 
+        WHERE glaw_number LIKE ? OR glaw_detail LIKE ? OR glaw_comment LIKE ?
+        ORDER BY glaw_id DESC
+    `;
 
-app.get('/member2',(req,res) => {
-    let sql2 = "SELECT * FROM tbl_user"
-    db.query(sql2, (err, results) => {
+    db.query(sql, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, results) => {
         if (err) {
-            console.error('เกิดข้อผิดพลาด:', err);
-            return res.render('member2', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+            logger.error('เกิดข้อผิดพลาดในการค้นหากฎหมายกลุ่มเกษตรกร:', err);
+            return res.status(500).json({ message: 'เกิดข้อผิดพลาดในการค้นหากฎหมายกลุ่มเกษตรกร' });
         }
-        res.render('member2', {data: results})
+        res.json(results);
     });
-})
-app.all('/product/edit/:id/',(req,res) => {
-    let id = req.params.id
-    let sql = "SELECT * FROM products WHERE id = ?"
-    db.query(sql, [id], (err, results) => {
-        if (err) {
-            console.error('เกิดข้อผิดพลาด:', err);
-            return res.render('edit', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
-        }
-        res.render('edit', {product: results[0]})
-    });
-})
-app.all('/product/update/:id', upload.single('image'), (req, res) => {
-    let id = req.params.id;
-    let { name, description } = req.body;
-    let image = req.file ? req.file.filename : null;
-
-    // ตรวจสอบว่ามีการอัปโหลดไฟล์หรือไม่
-    if (image) {
-        let sql = "UPDATE products SET name = ?, description = ?, image = ? WHERE id = ?";
-        db.query(sql, [name, description, image, id], (err, results) => {
-            if (err) {
-                console.error('เกิดข้อผิดพลาด:', err);
-                return res.render('edit', { message: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล', product: { id, name, description, image } });
-            }
-            res.redirect('/list_product');
-        });
-    } else {
-        let sql = "UPDATE products SET name = ?, description = ? WHERE id = ?";
-        db.query(sql, [name, description, id], (err, results) => {
-            if (err) {
-                console.error('เกิดข้อผิดพลาด:', err);
-                return res.render('edit', { message: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล', product: { id, name, description } });
-            }
-            res.redirect('/list_product');
-        });
-    }
 });
-app.listen(port,()=>{
-    console.log('server is listening on port', port);
-})
+
+// ฟัง Port
+app.listen(process.env.PORT || 3000, () => {
+    logger.info('Server is running on port 3000');
+});
