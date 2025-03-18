@@ -1,4 +1,5 @@
 // การนำเข้าโมดูลที่ใช้
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -10,7 +11,9 @@ const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
 const winston = require('winston');
-require('dotenv').config();
+const { clearScreenDown } = require('readline');
+
+
 
 // ตั้งค่าการใช้งาน CORS
 const corsOptions = {
@@ -23,20 +26,31 @@ app.use(cors(corsOptions));
 // ตั้งค่าการเชื่อมต่อฐานข้อมูล MySQL
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 });
-
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_NAME:', process.env.DB_NAME);
 // เชื่อมต่อกับฐานข้อมูล MySQL
+// db.connect((err) => {
+//     if (err) {
+//         winston.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
+//     } else {
+//         winston.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
+//     }
+// });
+
 db.connect((err) => {
     if (err) {
-        winston.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
+        console.error('❌ เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
+        process.exit(1); // ปิดโปรแกรมทันที
     } else {
-        winston.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
+        console.log('✅ เชื่อมต่อฐานข้อมูลสำเร็จ!');
     }
 });
-
 // ตั้งค่า multer สำหรับการอัปโหลดไฟล์
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -97,31 +111,42 @@ app.get('/', (req, res) => {
 });
 
 // ระบบ login (auth)
+// app.all('/login', (req, res) => {
+//     let login = req.body.login || '';
+//     let password = req.body.password || '';
+
+//     if (!login || !password) {
+//         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+//     }
+
+//     let sql = 'SELECT * FROM tbl_user WHERE use_username = ? AND use_password = ?';
+//     db.query(sql, [login, password], (err, results) => {
+//         if (err) {
+//             logger.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err);
+//             return res.render('index', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+//         }
+
+//         if (results.length > 0) {
+//             let user = results[0];
+//             req.session.user = user;
+//             req.session.login = login;
+//             req.session.isValid = true;
+//             res.redirect('/member');
+//         } else {
+//             res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
+//         }
+//     });
+// });
 app.all('/login', (req, res) => {
+    console.log('📥 ข้อมูลที่รับมา:', req.body);
+
     let login = req.body.login || '';
     let password = req.body.password || '';
 
     if (!login || !password) {
         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
     }
-
-    let sql = 'SELECT * FROM tbl_user WHERE use_username = ? AND use_password = ?';
-    db.query(sql, [login, password], (err, results) => {
-        if (err) {
-            logger.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err);
-            return res.render('index', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
-        }
-
-        if (results.length > 0) {
-            let user = results[0];
-            req.session.user = user;
-            req.session.login = login;
-            req.session.isValid = true;
-            res.redirect('/member');
-        } else {
-            res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
-        }
-    });
+    console.log('login',login);
 });
 
 // ระบบ logout
@@ -178,6 +203,6 @@ app.get('/api/glaws/search', (req, res) => {
 });
 
 // ฟัง Port
-app.listen(process.env.PORT || 3000, () => {
-    logger.info('Server is running on port 3000');
+app.listen(5000, () => {
+    logger.info('Server is running on port 5000 ');
 });

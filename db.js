@@ -1,14 +1,15 @@
 const mysql = require('mysql2');
-
+require('dotenv').config();
 // database connection
 // สร้างการเชื่อมต่อกับฐานข้อมูล MySQL
+// ตั้งค่าการเชื่อมต่อฐานข้อมูล MySQL
 const db = mysql.createConnection({
-    host: 'localhost',  // เปลี่ยนเป็น host ของคุณ
-    user: 'root',       // เปลี่ยนเป็น user ของ MySQL
-    password: 'sumet4631022',       // เปลี่ยนเป็น password ของ MySQL
-    database: 'naimet' // เปลี่ยนเป็นชื่อ database ของคุณ
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
-
 // เชื่อมต่อกับ MySQL
 db.connect((err) => {
     if (err) {
