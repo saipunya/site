@@ -31,17 +31,15 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 });
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_NAME:', process.env.DB_NAME);
-// เชื่อมต่อกับฐานข้อมูล MySQL
-// db.connect((err) => {
-//     if (err) {
-//         winston.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
-//     } else {
-//         winston.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
-//     }
-// });
+
+//เชื่อมต่อกับฐานข้อมูล MySQL
+db.connect((err) => {
+    if (err) {
+        winston.error('เชื่อมต่อฐานข้อมูลล้มเหลว:', err);
+    } else {
+        winston.info('เชื่อมต่อฐานข้อมูลสำเร็จ!');
+    }
+});
 
 db.connect((err) => {
     if (err) {
