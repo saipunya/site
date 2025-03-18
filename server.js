@@ -110,44 +110,44 @@ app.get('/', (req, res) => {
     res.render('index', { password : req.session.password || '' });
 });
 
-// ระบบ login (auth)
-// app.all('/login', (req, res) => {
-//     let login = req.body.login || '';
-//     let password = req.body.password || '';
-
-//     if (!login || !password) {
-//         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
-//     }
-
-//     let sql = 'SELECT * FROM tbl_user WHERE use_username = ? AND use_password = ?';
-//     db.query(sql, [login, password], (err, results) => {
-//         if (err) {
-//             logger.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err);
-//             return res.render('index', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
-//         }
-
-//         if (results.length > 0) {
-//             let user = results[0];
-//             req.session.user = user;
-//             req.session.login = login;
-//             req.session.isValid = true;
-//             res.redirect('/member');
-//         } else {
-//             res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
-//         }
-//     });
-// });
+//ระบบ login (auth)
 app.all('/login', (req, res) => {
-    console.log('📥 ข้อมูลที่รับมา:', req.body);
-
     let login = req.body.login || '';
     let password = req.body.password || '';
 
     if (!login || !password) {
         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
     }
-    console.log('login',login);
+
+    let sql = 'SELECT * FROM tbl_user WHERE use_username = ? AND use_password = ?';
+    db.query(sql, [login, password], (err, results) => {
+        if (err) {
+            logger.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err);
+            return res.render('index', { message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' });
+        }
+
+        if (results.length > 0) {
+            let user = results[0];
+            req.session.user = user;
+            req.session.login = login;
+            req.session.isValid = true;
+            res.redirect(302, '/member'); 
+        } else {
+            res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
+        }
+    });
 });
+// app.all('/login', (req, res) => {
+//     console.log('📥 ข้อมูลที่รับมา:', req.body);
+
+//     let login = req.body.login || '';
+//     let password = req.body.password || '';
+
+//     if (!login || !password) {
+//         return res.render('index', { message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+//     }
+//     console.log('login',login);
+// });
 
 // ระบบ logout
 app.get('/logout', (req, res) => {
@@ -158,7 +158,12 @@ app.get('/logout', (req, res) => {
 // หน้า member
 app.get('/member', (req, res) => {
     if (res.locals.login) {
-        res.render('member');
+        res.render('member', { 
+            login: req.session.login, 
+            user: req.session.user || {}, 
+            isValid: req.session.isValid || false, 
+            password: req.session.password || '' // ✅ เพิ่ม password เพื่อป้องกัน error
+        });
     } else {
         res.redirect('/');
     }

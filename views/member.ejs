@@ -1,7 +1,6 @@
 
 <% if(!locals.login){
-    res.redirect('/');
-    return;
+     window.location.href = "/";
 }else{ %>
 <%- include('layouts/header.ejs') %>
 
