@@ -199,3 +199,5 @@
 {"level":"info","message":"Server is running on port 5000 ","service":"api-server"}
 {"level":"info","message":"เชื่อมต่อฐานข้อมูลสำเร็จ!","service":"api-server"}
 {"level":"info","message":"Server is running on port 5000 ","service":"api-server"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-03-21T03:29:58.118Z"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-03-21T03:30:25.614Z"}

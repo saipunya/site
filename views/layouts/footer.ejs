@@ -19,7 +19,7 @@
 
 
             
-            <input type="password" class="form-control" id="exampleInputPassword" value="<%= password %>" name="password">
+            <input type="password" class="form-control" id="exampleInputPassword" value="<%= typeof password !== 'undefined' ? password : '' %>" name="password">
           </div>
           <!-- <div class="mb-3">
             <div class="form-check">

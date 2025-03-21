@@ -1,12 +1,13 @@
-
-<% if(!locals.login){
-     window.location.href = "/";
-}else{ %>
 <%- include('layouts/header.ejs') %>
 
-<p>test user : <%= login %></p>
-<p>fullname : <%= user.use_fullname %></p>
-<p>test isValid: <%= isValid %></p>
+<% if (!login) { %>
+  <script>
+    window.location.href = "/";
+  </script>
+<% } else { %>
+  <p>test user : <%= login %></p>
+  <p>fullname : <%= user.use_fullname %></p>
+  <p>test isValid: <%= isValid %></p>
+<% } %>
 
 <%- include('layouts/footer.ejs') %>
-<% } %>

@@ -107,8 +107,14 @@ app.get('/logout', (req, res) => {
 
 // ✅ หน้า Member
 app.get('/member', (req, res) => {
+  console.log("Session data:", req.session); 
   if (!req.session.isValid) return res.redirect('/');
-  res.render('member', { login: req.session.login, user: req.session.user || {}, isValid: req.session.isValid });
+  res.render('member', { 
+    login: req.session.login,
+     user: req.session.user || {},
+      password: req.session.password || '',
+      isValid: req.session.isValid 
+  });
 });
 
 // ✅ API ค้นหากฎหมายสหกรณ์
