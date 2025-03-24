@@ -91,8 +91,11 @@ app.all('/login', async (req, res) => {
         req.session.login = login;
         req.session.isValid = true;
         return res.redirect('/member');
+      }else{
+        req.session.isValid = false;
+        res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
       }
-      res.render('index', { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
+      
     });
   } catch (error) {
     logger.error('❌ Login Exception:', error);
