@@ -120,7 +120,7 @@ app.get('/member', (req, res) => {
 // ✅ API ค้นหากฎหมายสหกรณ์
 app.get('/api/laws/search', (req, res) => {
   let searchTerm = req.query.name || '';
-  let sql = `SELECT * FROM tbl_laws WHERE law_number LIKE ? OR law_detail LIKE ? OR law_search LIKE ? ORDER BY law_id DESC`;
+  let sql = `SELECT * FROM tbl_laws WHERE law_number LIKE ? OR law_detail LIKE ? OR law_search LIKE ? ORDER BY law_id ASC`;
 
   db.query(sql, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, results) => {
     if (err) {
@@ -134,7 +134,7 @@ app.get('/api/laws/search', (req, res) => {
 // ✅ API ค้นหากฎหมายกลุ่มเกษตรกร
 app.get('/api/glaws/search', (req, res) => {
   let searchTerm = req.query.name || '';
-  let sql = `SELECT * FROM tbl_glaws WHERE glaw_number LIKE ? OR glaw_detail LIKE ? OR glaw_comment LIKE ? ORDER BY glaw_id DESC`;
+  let sql = `SELECT * FROM tbl_glaws WHERE glaw_number LIKE ? OR glaw_detail LIKE ? OR glaw_comment LIKE ? ORDER BY glaw_id ASC`;
 
   db.query(sql, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, results) => {
     if (err) {
