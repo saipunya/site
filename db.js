@@ -3,6 +3,7 @@ require('dotenv').config();
 // database connection
 // สร้างการเชื่อมต่อกับฐานข้อมูล MySQL
 // ตั้งค่าการเชื่อมต่อฐานข้อมูล MySQL
+//  การเชื่อมต่อนี้ได้แสดงในไฟล์ server.js แล้ว
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
