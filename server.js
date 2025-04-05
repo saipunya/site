@@ -17,11 +17,12 @@ app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'], allowedHe
 
 // ✅ เชื่อมต่อฐานข้อมูล MySQL
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: '103.30.127.74',
+  port: 3306,
+  user: 'naimet_user',
+  password: 'sumet4631022',
+  database: 'naimet_db',
+  multipleStatements: true,
 });
 
 // ตรวจสอบการเชื่อมต่อ
@@ -155,7 +156,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ ฟัง Port 5000
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`);
 });
