@@ -1,0 +1,30 @@
+{
+    "remotePath": "./",
+    "host": "103.30.127.74",
+    "username": "naimet",
+    "password": "sumetchoorat@4631022",
+    "path": "./httpdocs",
+    "port": 21,
+    "secure": false,
+    "protocol": "ftp",
+    "uploadOnSave": true,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "agent": null,
+    "allow": [],
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store",
+        "\\node_modules",
+        "\\.gitignore"
+    ],
+    "generatedFiles": {
+        "extensionsToInclude": [
+            ""
+        ],
+        "path": ""
+    }
+}

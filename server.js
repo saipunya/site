@@ -123,7 +123,6 @@ app.get('/member', (req, res) => {
 
 // หน้า ทดสอบ Create
 app.get('/create', (req, res) => {
-  if (!req.session.isValid) return res.redirect('/');
   res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
 });
 
@@ -162,7 +161,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ ฟัง Port 5000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`);
 });
