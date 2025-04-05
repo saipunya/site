@@ -121,6 +121,12 @@ app.get('/member', (req, res) => {
   });
 });
 
+// หน้า ทดสอบ Create
+app.get('/create', (req, res) => {
+  if (!req.session.isValid) return res.redirect('/');
+  res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
+});
+
 // ✅ API ค้นหากฎหมายสหกรณ์
 app.get('/api/laws/search', (req, res) => {
   
