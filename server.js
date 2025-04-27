@@ -24,7 +24,7 @@ const db = mysql.createConnection({
   database: 'naimet_db',
   multipleStatements: true,
 });
-
+ 
 // ตรวจสอบการเชื่อมต่อ
 db.connect((err) => {
   if (err) {
@@ -121,10 +121,10 @@ app.get('/member', (req, res) => {
   });
 });
 
-// หน้า ทดสอบ Create
-app.get('/create', (req, res) => {
-  res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
-});
+// // หน้า ทดสอบ Create
+// app.get('/create', (req, res) => {
+//   res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
+// });
 
 // ✅ API ค้นหากฎหมายสหกรณ์
 app.get('/api/laws/search', (req, res) => {
@@ -159,6 +159,10 @@ app.get('/api/glaws/search', (req, res) => {
 app.use((req, res, next) => {
   res.status(404).json({ status: 'error', message: 'Not Found' });
 });
+app.get('/ping', (req, res) => {
+  res.send('Pong!');
+});
+// ✅ Middleware จัดการ Error 500  
 
 // ✅ ฟัง Port 5000
 const PORT = process.env.PORT || 3000;
