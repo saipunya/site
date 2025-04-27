@@ -121,10 +121,10 @@ app.get('/member', (req, res) => {
   });
 });
 
-// // หน้า ทดสอบ Create
-// app.get('/create', (req, res) => {
-//   res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
-// });
+// หน้า ทดสอบ Create
+app.get('/create', (req, res) => {
+  res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
+});
 // ติดต่อเรา
 app.get('/contact', (req, res) => {
   res.render('contact', { user: req.session.user || {}, password: req.session.password || '' });
@@ -169,7 +169,7 @@ app.get('/ping', (req, res) => {
 // ✅ Middleware จัดการ Error 500  
 
 // ✅ ฟัง Port 5000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`);
 });
