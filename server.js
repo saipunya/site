@@ -125,6 +125,10 @@ app.get('/member', (req, res) => {
 // app.get('/create', (req, res) => {
 //   res.render('create', { user: req.session.user || {}, password: req.session.password || '' });
 // });
+// ติดต่อเรา
+app.get('/contact', (req, res) => {
+  res.render('contact', { user: req.session.user || {}, password: req.session.password || '' });
+});
 
 // ✅ API ค้นหากฎหมายสหกรณ์
 app.get('/api/laws/search', (req, res) => {
@@ -166,6 +170,6 @@ app.get('/ping', (req, res) => {
 
 // ✅ ฟัง Port 5000
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,'0.0.0.0', () => {
+app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`);
 });
