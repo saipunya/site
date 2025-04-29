@@ -129,6 +129,9 @@ app.get('/create', (req, res) => {
 app.get('/contact', (req, res) => {
   res.render('contact', { user: req.session.user || {}, password: req.session.password || '' });
 });
+app.get('/privacy', (req, res) => {
+  res.send('privacy', { user: req.session.user || {}, password: req.session.password || '' });
+});
 
 // ✅ API ค้นหากฎหมายสหกรณ์
 app.get('/api/laws/search', (req, res) => {
