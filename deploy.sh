@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /path/to/your/app
+git pull origin main
+npm install
+pm2 restart server.js
